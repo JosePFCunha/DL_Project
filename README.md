@@ -110,6 +110,30 @@ _**6)**_
 **Adição de complexidade até gerar overfitting**
 (acrescentar layers, aumentar o número de neurónios, treinar por mais tempo);
 
+# Adicionar camadas adicionais ao modelo
+baseline_model = Sequential([
+  layers.Input(shape=(100, 100, 3)),
+  layers.Flatten(),
+  layers.Dense(300, activation='relu'),
+  layers.Dense(200, activation='relu'),  # Adicione uma camada densa com mais neurônios
+  layers.Dense(100, activation='relu'),  # Adicione uma camada densa com mais neurônios
+  layers.Dense(10, activation='relu'),
+  layers.Dense(1, activation='linear')
+])
+
+# Compilar o modelo
+baseline_model.compile(
+    optimizer='adam',
+    loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
+    metrics=['accuracy'])
+
+# Treinar o modelo por mais épocas
+epochs=50  # Aumente o número de épocas de treinamento
+history = baseline_model.fit(
+  resized_ds_train,
+  validation_data=resized_ds_val,
+  epochs=epochs
+)
 
 
 _**7)**_
@@ -117,12 +141,47 @@ _**7)**_
 **Regularização e tuning dos híper-parâmetros**
 (acrescentar regularização, dropout, tentar diferentes valores de híper parâmetros);
 
+from tensorflow.keras import regularizers
 
+# Adicionar regularização Dropout
+baseline_model = Sequential([
+  layers.Input(shape=(100, 100, 3)),
+  layers.Flatten(),
+  layers.Dense(512, activation='relu', kernel_regularizer=regularizers.l2(0.001)),  # Adicionando regularização L2
+  layers.Dropout(0.5),  # Adicionando Dropout com uma taxa de 0.5
+  layers.Dense(256, activation='relu', kernel_regularizer=regularizers.l2(0.001)),  # Adicionando regularização L2
+  layers.Dropout(0.5),  # Adicionando Dropout com uma taxa de 0.5
+  layers.Dense(128, activation='relu', kernel_regularizer=regularizers.l2(0.001)),  # Adicionando regularização L2
+  layers.Dropout(0.5),  # Adicionando Dropout com uma taxa de 0.5
+  layers.Dense(64, activation='relu', kernel_regularizer=regularizers.l2(0.001)),  # Adicionando regularização L2
+  layers.Dropout(0.5),  # Adicionando Dropout com uma taxa de 0.5
+  layers.Dense(1, activation='linear')
+])
+
+# Compilando o modelo
+baseline_model.compile(
+    optimizer='adam',
+    loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
+    metrics=['accuracy'])
+
+# Treinando o modelo com o número de épocas otimizado anteriormente
+epochs = 50
+history = baseline_model.fit(
+  resized_ds_train,
+  validation_data=resized_ds_val,
+  epochs=epochs
+)
 
 
 _**8)**_
 
 **Argumentar sobre a utilidade do modelo criado.**
+
+O modelo apresentado satisfaz claramente o objetivo ao qual nos proposemos, com uma índice alto de Accuracy e um índice pequeno de Loss.
+Apesar de na primeira fase do modelo a performance ao nível da Accuracy não ser alta (abaixo de 50% e uma loss grande), procedemos à alteração do modelo para CNN.
+Desta forma, a eficácia do modelo evoluiu considerávelmente e o índice de Accuracy, melhorou de acordo, tornando o modelo mais preciso.
+
+Podemos então inferir que é com alta precisão que conseguimos uma classificação e distinção clara entre imagens com humanos e imagens com cavalos, tal como pretendido.
 
 
    
