@@ -75,6 +75,7 @@ def plot_acuracy_loss(history):
     plt.show()
 
 """Dividir o dataset em 3
+Inicialmente estava dividido em 2 mas dividimos em 3 para termos a validation.
 Em Treino, teste e validação
 """
 
@@ -192,6 +193,8 @@ history = baseline_model.fit(
 
 
 plot_acuracy_loss(history)
+
+
 
 cnn_model = Sequential([
   layers.Input(shape=(100, 100, 3)),
