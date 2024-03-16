@@ -168,6 +168,9 @@ baseline_model = Sequential([
   layers.Dense(1, activation='linear')
 ])
 
+#Optimizer Adam é utilizado para ter uma learning curve maior no inicio e depois diminui para evitar o efeito "ping-pong"
+Desta forma conseguimos acelerar o processo de optimização
+
 baseline_model.compile(
     optimizer='adam',
     loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
