@@ -16,7 +16,7 @@ from tensorflow.keras.models import Sequential
 import matplotlib.pyplot as plt
 import numpy as np
 
-#importar o dataset escolhigo
+#importar o dataset escolhido
 
 import tensorflow_datasets as tfds
 tfds.load("horses_or_humans")
@@ -181,6 +181,8 @@ history = baseline_model.fit(
   epochs=epochs
 )
 
+
+
 plot_acuracy_loss(history)
 
 cnn_model = Sequential([
@@ -211,3 +213,30 @@ history = cnn_model.fit(
 )
 
 plot_acuracy_loss(history)
+
+# O modelo tem alta Accuracy e pouca loss, para podermos utilizar modelo de regularização vamos piorar os resuultados do modelo.
+
+# Adicionar camadas adicionais ao modelo
+baseline_model = Sequential([
+  layers.Input(shape=(100, 100, 3)),
+  layers.Flatten(),
+  layers.Dense(300, activation='relu'),
+  layers.Dense(200, activation='relu'),  # Adicione uma camada densa com mais neurônios
+  layers.Dense(100, activation='relu'),  # Adicione uma camada densa com mais neurônios
+  layers.Dense(10, activation='relu'),
+  layers.Dense(1, activation='linear')
+])
+
+# Compilar o modelo
+baseline_model.compile(
+    optimizer='adam',
+    loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
+    metrics=['accuracy'])
+
+# Treinar o modelo por mais épocas
+epochs=50  # Aumente o número de épocas de treinamento
+history = baseline_model.fit(
+  resized_ds_train,
+  validation_data=resized_ds_val,
+  epochs=epochs
+)
